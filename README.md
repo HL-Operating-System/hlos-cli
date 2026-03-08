@@ -13,7 +13,7 @@ python3 cli.py
 
 ## How It Works
 
-HLOS uses an **Agent Wallet (EOA)**-- your main wallet approves this EOA (the "agent") that can trade on its behalf without requiring your main key for every order. Keys are never stored permanently, they only live in server memory during an active session and get wiped on /disconnect which is identical to the Hyperliquid Exchange on the L1.
+HLOS uses an **Agent Wallet (EOA)**-- your main wallet approves this EOA (the "agent") that can trade on its behalf without requiring your main key for every order(true one-click trading). Keys are never stored permanently, they only live in server memory during an active session and get wiped on /disconnect which is identical to the Hyperliquid Exchange on the L1.
 
 **New users** go through a one-time setup, then trade via the agent. **Returning users** skip straight to `/connect`.
 
