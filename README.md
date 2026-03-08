@@ -1,6 +1,6 @@
 # hlos-cli
 
-FastAPI server for agent-based trading on [Hyperliquid](https://hyperliquid.xyz) via the [rePRICE / HLOS](https://hlos.app) platform.
+FastAPI server for agent-based trading on [Hyperliquid](https://hyperliquid.xyz) via [HLOS](https://hlos.app).
 
 Built for AI agents, trading bots, and developers who want programmatic access to Hyperliquid perpetuals through a simple REST API.
 
@@ -11,7 +11,7 @@ pip install -r requirements.txt
 python main.py
 ```
 
-Server starts at `http://localhost:8000`. Interactive docs at `http://localhost:8000/docs`.
+Server starts at `https://api.hlos.app`. Interactive docs at `https://api.hlos.app/docs`.
 
 ### Docker
 
@@ -35,7 +35,7 @@ Hyperliquid uses an **agent wallet** pattern: your main wallet approves a second
 ### 1. Generate an agent wallet
 
 ```bash
-curl -X POST http://localhost:8000/agent/create
+curl -X POST https://api.hlos.app/agent/create
 ```
 
 Returns `agent_address` and `agent_private_key`. **Save the private key.**
@@ -43,7 +43,7 @@ Returns `agent_address` and `agent_private_key`. **Save the private key.**
 ### 2. Approve the agent on Hyperliquid L1
 
 ```bash
-curl -X POST http://localhost:8000/agent/approve \
+curl -X POST https://api.hlos.app/agent/approve \
   -H "Content-Type: application/json" \
   -d '{
     "main_private_key": "0xYOUR_MAIN_WALLET_KEY",
@@ -54,7 +54,7 @@ curl -X POST http://localhost:8000/agent/approve \
 ### 3. Approve builder fee
 
 ```bash
-curl -X POST http://localhost:8000/builder/approve \
+curl -X POST https://api.hlos.app/builder/approve \
   -H "Content-Type: application/json" \
   -d '{"main_private_key": "0xYOUR_MAIN_WALLET_KEY"}'
 ```
@@ -64,7 +64,7 @@ curl -X POST http://localhost:8000/builder/approve \
 Shares USDC margin across perps + HIP-3 clearinghouses.
 
 ```bash
-curl -X POST http://localhost:8000/margin/unified \
+curl -X POST https://api.hlos.app/margin/unified \
   -H "Content-Type: application/json" \
   -d '{"main_private_key": "0xYOUR_MAIN_WALLET_KEY", "enabled": true}'
 ```
@@ -72,7 +72,7 @@ curl -X POST http://localhost:8000/margin/unified \
 ### 5. Connect (start trading session)
 
 ```bash
-curl -X POST http://localhost:8000/connect \
+curl -X POST https://api.hlos.app/connect \
   -H "Content-Type: application/json" \
   -d '{
     "user_address": "0xYOUR_MAIN_WALLET",
@@ -87,7 +87,7 @@ curl -X POST http://localhost:8000/connect \
 If you already have an approved agent, skip to step 5:
 
 ```bash
-curl -X POST http://localhost:8000/connect \
+curl -X POST https://api.hlos.app/connect \
   -H "Content-Type: application/json" \
   -d '{
     "user_address": "0xYOUR_MAIN_WALLET",
@@ -102,7 +102,7 @@ curl -X POST http://localhost:8000/connect \
 ### Place a limit order
 
 ```bash
-curl -X POST http://localhost:8000/order/limit \
+curl -X POST https://api.hlos.app/order/limit \
   -H "Content-Type: application/json" \
   -d '{
     "user_address": "0xYOUR_MAIN_WALLET",
@@ -118,7 +118,7 @@ curl -X POST http://localhost:8000/order/limit \
 ### Place a stop-loss / take-profit
 
 ```bash
-curl -X POST http://localhost:8000/order/trigger \
+curl -X POST https://api.hlos.app/order/trigger \
   -H "Content-Type: application/json" \
   -d '{
     "user_address": "0xYOUR_MAIN_WALLET",
@@ -133,7 +133,7 @@ curl -X POST http://localhost:8000/order/trigger \
 ### Cancel an order
 
 ```bash
-curl -X POST http://localhost:8000/order/cancel \
+curl -X POST https://api.hlos.app/order/cancel \
   -H "Content-Type: application/json" \
   -d '{
     "user_address": "0xYOUR_MAIN_WALLET",
@@ -145,7 +145,7 @@ curl -X POST http://localhost:8000/order/cancel \
 ### Set leverage
 
 ```bash
-curl -X POST http://localhost:8000/leverage \
+curl -X POST https://api.hlos.app/leverage \
   -H "Content-Type: application/json" \
   -d '{
     "user_address": "0xYOUR_MAIN_WALLET",
@@ -172,16 +172,16 @@ curl -X POST http://localhost:8000/leverage \
 
 ```bash
 # Check balance
-curl http://localhost:8000/balance/0xYOUR_ADDRESS
+curl https://api.hlos.app/balance/0xYOUR_ADDRESS
 
 # View positions
-curl http://localhost:8000/positions/0xYOUR_ADDRESS
+curl https://api.hlos.app/positions/0xYOUR_ADDRESS
 
 # View open orders
-curl http://localhost:8000/orders/0xYOUR_ADDRESS
+curl https://api.hlos.app/orders/0xYOUR_ADDRESS
 
 # Get all prices
-curl http://localhost:8000/prices
+curl https://api.hlos.app/prices
 ```
 
 ---

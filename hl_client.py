@@ -16,7 +16,7 @@ from hyperliquid.exchange import Exchange
 from hyperliquid.utils import constants
 
 # ---------------------------------------------------------------------------
-# Constants (mirror from the Next.js app)
+# Constants
 # ---------------------------------------------------------------------------
 
 BUILDER_ADDRESS = "0xeFFC82C750f16929F4D8283E8057007D1bB59092"
@@ -82,7 +82,7 @@ def _make_exchange(
 def approve_agent(
     main_private_key: str,
     agent_address: str,
-    agent_name: str = "rePRICE-CLI",
+    agent_name: str = "HLOS",
     base_url: str = MAINNET_API,
 ) -> dict:
     """Approve an agent address on Hyperliquid L1.
@@ -104,7 +104,7 @@ def approve_builder_fee(
     main_private_key: str,
     base_url: str = MAINNET_API,
 ) -> dict:
-    """Approve builder fee for rePRICE (main wallet signature required)."""
+    """Approve HLOS builder fee (main wallet signature required)."""
     exchange = _make_exchange(main_private_key, base_url)
     result = exchange.approve_builder_fee(BUILDER_ADDRESS, BUILDER_MAX_FEE_RATE)
     return {"status": "ok", "response": result}
