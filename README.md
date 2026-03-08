@@ -1,98 +1,65 @@
-# hlos-cli
+# HLOS-CLI
 
-FastAPI server for agent-based trading on [Hyperliquid](https://hyperliquid.xyz) via [HLOS](https://hlos.app).
+A CLI for agents and quants to automate their way around the Hyperliquid Operating System.
 
-Built for AI agents, trading bots, and developers who want programmatic access to Hyperliquid perpetuals through a simple REST API.
-
-## Quick Start
+## Install
 
 ```bash
+git clone
+cd hlos-cli
 pip install -r requirements.txt
-python main.py
+python3 cli.py
 ```
-
-Server starts at `https://api.hlos.app`. Interactive docs at `https://api.hlos.app/docs`.
-
-### Docker
-
-```bash
-docker build -t hlos-cli .
-docker run -p 8000:8000 hlos-cli
-```
-
----
 
 ## How It Works
 
-Hyperliquid uses an **agent wallet** pattern: your main wallet approves a secondary EOA (the "agent") that can trade on its behalf without requiring your main key for every order.
+HLOS uses an **Agent Wallet (EOA)**-- your main wallet approves this EOA (the "agent") that can trade on its behalf without requiring your main key for every order. Keys are never stored permanently, they only live in server memory during an active session and get wiped on /disconnect which is identical to the Hyperliquid Exchange on the L1.
 
 **New users** go through a one-time setup, then trade via the agent. **Returning users** skip straight to `/connect`.
 
 ---
 
-## New User Flow
+## New User Agent Setup: (Commands In Terminal)
 
 ### 1. Generate an agent wallet
 
 ```bash
-curl -X POST https://api.hlos.app/agent/create
+create-agent
 ```
-
-Returns `agent_address` and `agent_private_key`. **Save the private key.**
 
 ### 2. Approve the agent on Hyperliquid L1
 
 ```bash
-curl -X POST https://api.hlos.app/agent/approve \
-  -H "Content-Type: application/json" \
-  -d '{
-    "main_private_key": "0xYOUR_MAIN_WALLET_KEY",
-    "agent_address": "0xAGENT_ADDRESS_FROM_STEP_1"
-  }'
+approve-agent
 ```
 
 ### 3. Approve builder fee
 
 ```bash
-curl -X POST https://api.hlos.app/builder/approve \
-  -H "Content-Type: application/json" \
-  -d '{"main_private_key": "0xYOUR_MAIN_WALLET_KEY"}'
+approve-builder
 ```
 
-### 4. (Optional) Enable unified margin
+### 4. Enable unified margin (If Not Already Enabled)
 
 Shares USDC margin across perps + HIP-3 clearinghouses.
 
 ```bash
-curl -X POST https://api.hlos.app/margin/unified \
-  -H "Content-Type: application/json" \
-  -d '{"main_private_key": "0xYOUR_MAIN_WALLET_KEY", "enabled": true}'
+unified-margin
 ```
 
 ### 5. Connect (start trading session)
 
 ```bash
-curl -X POST https://api.hlos.app/connect \
-  -H "Content-Type: application/json" \
-  -d '{
-    "user_address": "0xYOUR_MAIN_WALLET",
-    "agent_private_key": "0xAGENT_PRIVATE_KEY"
-  }'
+connect
 ```
 
 ---
 
-## Returning User Flow
+## Returning User Flow (Commands In Terminal)
 
-If you already have an approved agent, skip to step 5:
 
 ```bash
-curl -X POST https://api.hlos.app/connect \
-  -H "Content-Type: application/json" \
-  -d '{
-    "user_address": "0xYOUR_MAIN_WALLET",
-    "agent_private_key": "0xAGENT_PRIVATE_KEY"
-  }'
+connect
 ```
 
 ---
@@ -102,57 +69,25 @@ curl -X POST https://api.hlos.app/connect \
 ### Place a limit order
 
 ```bash
-curl -X POST https://api.hlos.app/order/limit \
-  -H "Content-Type: application/json" \
-  -d '{
-    "user_address": "0xYOUR_MAIN_WALLET",
-    "asset": "BTC",
-    "is_buy": true,
-    "price": 90000,
-    "size": 0.01,
-    "leverage": 10,
-    "tif": "Gtc"
-  }'
+buy or sell
 ```
 
 ### Place a stop-loss / take-profit
 
 ```bash
-curl -X POST https://api.hlos.app/order/trigger \
-  -H "Content-Type: application/json" \
-  -d '{
-    "user_address": "0xYOUR_MAIN_WALLET",
-    "asset": "BTC",
-    "is_buy": false,
-    "trigger_price": 85000,
-    "size": 0.01,
-    "tpsl": "sl"
-  }'
+tp or sl
 ```
 
 ### Cancel an order
 
 ```bash
-curl -X POST https://api.hlos.app/order/cancel \
-  -H "Content-Type: application/json" \
-  -d '{
-    "user_address": "0xYOUR_MAIN_WALLET",
-    "asset": "BTC",
-    "oid": 123456
-  }'
+cancel
 ```
 
 ### Set leverage
 
 ```bash
-curl -X POST https://api.hlos.app/leverage \
-  -H "Content-Type: application/json" \
-  -d '{
-    "user_address": "0xYOUR_MAIN_WALLET",
-    "asset": "ETH",
-    "leverage": 20,
-    "is_cross": true
-  }'
+leverage
 ```
 
 ---
@@ -172,16 +107,16 @@ curl -X POST https://api.hlos.app/leverage \
 
 ```bash
 # Check balance
-curl https://api.hlos.app/balance/0xYOUR_ADDRESS
+curl http://api.hlos.app/balance/0xYOUR_ADDRESS
 
 # View positions
-curl https://api.hlos.app/positions/0xYOUR_ADDRESS
+curl http://api.hlos.app/positions/0xYOUR_ADDRESS
 
 # View open orders
-curl https://api.hlos.app/orders/0xYOUR_ADDRESS
+curl http://api.hlos.app/orders/0xYOUR_ADDRESS
 
 # Get all prices
-curl https://api.hlos.app/prices
+curl http://api.hlos.app/prices
 ```
 
 ---
